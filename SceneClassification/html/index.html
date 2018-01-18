@@ -1,0 +1,379 @@
+<html>
+<head>
+<title>CS 385 Final Project</title>
+<link href='http://fonts.googleapis.com/css?family=Nunito:300|Crimson+Text|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" title="Default" href="styles/github.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>  
+
+<link rel="stylesheet" href="highlighting/styles/default.css">
+<script src="highlighting/highlight.pack.js"></script>
+
+<style type="text/css">
+body {
+	margin: 0px;
+	width: 100%;
+	font-family: 'Crimson Text', serif;
+	font-size: 20px;
+	background: #fcfcfc;
+}
+h1 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 28px;
+	margin: 25px 0px 0px 0px;
+	text-transform: lowercase;
+
+}
+
+h2 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	margin: 15px 0px 35px 0px;
+	color: #333;	
+	word-spacing: 3px;
+}
+
+h3 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 26px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+h4 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 22px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+
+h5 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	margin: 10px 0px 10px 0px;
+	color: #111;
+	word-spacing: 2px;
+}
+
+p, li {
+	color: #444;
+}
+
+a {
+	color: #DE3737;
+}
+
+.container {
+	margin: 0px auto 0px auto;
+	width: 1160px;
+}
+
+#header {
+	background: #333;
+	width: 100%;
+}
+
+#headersub {
+	color: #ccc;
+	width: 960px;
+	margin: 0px auto 0px auto;
+	padding: 20px 0px 20px 0px;
+}
+
+.chart {
+	width: 480px;
+}
+.lol {
+	font-size: 16px;
+	color: #888;
+	font-style: italic;
+}
+.sep {
+	height: 1px;
+	width: 100%;
+	background: #999;
+	margin: 20px 0px 20px 0px;
+}
+.footer{
+	font-size: 16px;
+}
+.latex {
+	width: 100%;
+}
+
+.latex img {
+	display: block;
+	margin: 0px auto 0px auto;
+}
+
+pre {
+	font-family: 'Droid Sans Mono';
+	font-size: 14px;
+}
+
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table td img {
+  text-align: center;
+  vertical-align: middle;
+}
+
+#contents a {
+}
+</style>
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="header" >
+<div id="headersub">
+  <h1><center>Scene Classification <span style="color: #DE3737">Tyler Holland, Nicole Snyder, Michelle Padgett</span></center></h1>
+</div>
+</div>
+<div class="container">
+
+	
+	<center><p><h2>
+	CS 385: Scene Classification using Spatial Pyramid and Random Decision Forest</p></h2></center>
+
+<div style="float: right; padding: 20px">
+<img src="cover.png" width="600" />
+<p style="font-size: 14px">Sample dataset for scene classification</p>
+</div>
+
+<h3>Introduction</h3>
+
+
+
+<p> In this project we were trying to find the "best" classifer for scene classification. We implemented a Spatial Pyramid to classify scenes, and improve performance on a bag-of-words representation. A spatial pyramid works by dividing the given image into increasingy smalled sub-regions and computing histograms of the local features found inside each sub-region. Spatial pyramid is more efficient than bag-of-words implementaion because it not only detects what the objects are, but also where in the image they are. We also implemented a random decision forest classifer, which  We compared our spatial pyramid results and random decision forest results to the starter codes histogram intersection classifier to find which had the best performance.
+	</p>
+
+
+
+
+<div style="clear:both">
+<h3>Our Approach & Algorithm</h3>
+
+<p> 	
+
+The first method we experimented with was using a spatial pyramid. The spatial pyramid implementation is similar to bag of words except that instead of getting the frequency of features in the entire image, we broke the image up into sections, and counted the frequency in each section. This allowed us to not only find the feature we were looking for but to find where that feature is located in the image. Our second approach was using Random Decision Forests. Our implementation methods are described in more detail below. 
+	</p>
+	
+	<u><h3>Spatial Pyramid</h3></u>
+	<center>
+<img src="unnamed.png" />
+	</center>
+<p> 	
+
+We found some spatial pyramid starter code to help us begin the implementation of our project. The code implemented a different classification technique than we had originally planned on using called histogram intersection. We ended up keeping that and also adding our own to compare the results. We added the support vector machine classification technique from bag of words. We got the project working with 2 classes before moving on to multi-class classifiers. 
+
+In order to identify an image with multiple possible classes, we used 8 support vector machines, each one trained to differentiate a single class from the rest.
+Then for each test image, all 8 SVMs were run, and the chosen label was the SVM with the highest confidence.</p>
+
+
+	
+<u><h3>Random Decision Forest</h3></u>
+<p>The second method we used was the random decision tree forest. To classify a new object from an input vector, put the input vector down each of the trees in the forest. Each tree gives a classification, and we say the tree "votes" for that class. The forest chooses the classification having the most votes (over all the trees in the forest).</p>
+
+
+<h2>Confusion Matrix Explained</h2>
+	<table border=0 cellpadding=4 cellspacing=1>
+<tr>
+<th>Category name</th>
+<th>Accuracy</th>
+<th colspan=2>Sample training images</th>
+<th colspan=2>Sample true positives</th>
+<th colspan=2>False positives with true label</th>
+<th colspan=2>False negatives with wrong predicted label</th>
+</tr>
+<tr>
+<td>Airport</td>
+<td>0.94</td>
+<td bgcolor=LightBlue><img src="images/airport/sun_ahblefrromawiqvx.jpg" width=100 height=75></td>
+<td bgcolor=LightBlue><img src="images/airport/sun_akzzhyuyqjksqovd.jpg" width=100 height=75></td>
+<td bgcolor=LightGreen><img src="images/airport/sun_adtgbjkmsxruvbwk.jpg" width=100 height=75></td>
+<td bgcolor=LightGreen><img src="images/airport/sun_akhqgzrrubgnwzpa.jpg" width=101 height=75></td>
+<td bgcolor=LightCoral><img src="images/kitchen/sun_aajtnvzzpsjdzres.jpg" width=112 height=75><br><small>Kitchen</small></td>
+<td bgcolor=LightCoral><img src="images/sky/sun_abwsdvzxvopsvuby.jpg" width=75 height=75><br><small>Sky</small></td>
+<td bgcolor=#FFBB55><img src="images/airport/sun_agsidjaakxyijmqc.jpg" width=100 height=75><br><small>Campus</small></td>
+<td bgcolor=#FFBB55><img src="images/airport/sun_afvhqmbmqkgpkjbn.jpg" width=57 height=75><br><small>Kitchen</small></td>
+</tr>
+<tr>
+<td>Auditorium</td>
+<td>0.96</td>
+<td bgcolor=LightBlue><img src="images/auditorium/sun_abbbtjsssstmdjja.jpg" width=103 height=75></td>
+<td bgcolor=LightBlue><img src="images/auditorium/sun_acbfyedrzzdxemwv.jpg" width=113 height=75></td>
+<td bgcolor=LightGreen><img src="images/auditorium/sun_abdskuxyehwapyqc.jpg" width=106 height=75></td>
+<td bgcolor=LightGreen><img src="images/auditorium/sun_abjizyownqyjmdaf.jpg" width=100 height=75></td>
+<td bgcolor=LightCoral><img src="images/airport/sun_ansizqyqblmyoaui.jpg" width=123 height=75><br><small>Airport</small></td>
+<td bgcolor=LightCoral><img src="images/campus/sun_aqfseewjcglwnzun.jpg" width=75 height=75><br><small>Campus</small></td>
+<td bgcolor=#FFBB55><img src="images/auditorium/sun_abfkbtrejmpugmic.jpg" width=131 height=75><br><small>Football Field</small></td>
+<td bgcolor=#FFBB55><img src="images/auditorium/sun_abjizyownqyjmdaf.jpg" width=111 height=75><br><small>Kitchen</small></td>
+</tr>
+<tr>
+<td>Bamboo Forest</td>
+<td>0.99</td>
+<td bgcolor=LightBlue><img src="images/bamboo_forest/sun_aaiquffkgurupglf.jpg" width=113 height=75></td>
+<td bgcolor=LightBlue><img src="images/bamboo_forest/sun_aavxmbkulzqweeqg.jpg" width=112 height=75></td>
+<td bgcolor=LightGreen><img src="images/bamboo_forest/sun_abjauuqefihxqire.jpg" width=101 height=75></td>
+<td bgcolor=LightGreen><img src="images/bamboo_forest/sun_aceztgmiqkbghnpu.jpg" width=114 height=75></td>
+<td bgcolor=LightCoral><img src="images/sky/sun_aguqhzpkivntelwh.jpg" width=75 height=75><br><small>Sky</small></td>
+<td bgcolor=LightCoral><img src="images/campus/sun_abpxvcuxhqldcvln.jpg" width=100 height=75><br><small>Campus</small></td>
+<td bgcolor=#FFBB55><img src="images/bamboo_forest/sun_adoyxytktehocpja.jpg" width=52 height=75><br><small>Desert</small></td>
+<td bgcolor=#FFBB55><img src="images/bamboo_forest/sun_abnzgooppfrrcdfs.jpg" width=101 height=75><br><small>Football Field</small></td>
+</tr>
+<tr>
+<td>Campus</td>
+<td>0.95</td>
+<td bgcolor=LightBlue><img src="images/campus/sun_acfgwrhgcjrpcbru.jpg" width=110 height=75></td>
+<td bgcolor=LightBlue><img src="images/campus/sun_ahjkmpfqmcvxjhxt.jpg" width=111 height=75></td>
+<td bgcolor=LightGreen><img src="images/campus/sun_acdmqooqscwszayf.jpg" width=98 height=75></td>
+<td bgcolor=LightGreen><img src="images/campus/sun_agruqaefvrvumwod.jpg" width=100 height=75></td>
+<td bgcolor=LightCoral><img src="images/bamboo_forest/sun_aaegrbxogokacwmz.jpg" width=116 height=75><br><small>Bamboo Forest</small></td>
+<td bgcolor=LightCoral><img src="images/football_field/sun_bgoxgnibylryqtnc.jpg" width=115 height=75><br><small>Football Field</small></td>
+<td bgcolor=#FFBB55><img src="images/campus/sun_adiqdyqsqarvtact.jpg" width=100 height=75><br><small>Desert</small></td>
+<td bgcolor=#FFBB55><img src="images/campus/sun_acdmqooqscwszayf.jpg" width=101 height=75><br><small>Bamboo Forest</small></td>
+</tr>
+<tr>
+<td>Desert</td>
+<td>0.98</td>
+<td bgcolor=LightBlue><img src="images/desert/sun_aawnvdsxsoudsdwo.jpg" width=110 height=75></td>
+<td bgcolor=LightBlue><img src="images/desert/sun_ajaenqfbsotsjqtn.jpg" width=130 height=75></td>
+<td bgcolor=LightGreen><img src="images/desert/sun_acqlitnnratfsrsk.jpg" width=96 height=75></td>
+<td bgcolor=LightGreen><img src="images/desert/sun_advllqdtdaefsajw.jpg" width=105 height=75></td>
+<td bgcolor=LightCoral><img src="images/campus/sun_agjdyybkyzxpqips.jpg" width=75 height=75><br><small>Campus</small></td>
+<td bgcolor=LightCoral><img src="images/football_field/sun_aedcjgjztgoialpm.jpg" width=90 height=75><br><small>Football Field</small></td>
+<td bgcolor=#FFBB55><img src="images/desert/sun_adbymuzeqfdwlerv.jpg" width=98 height=75><br><small>Kitchen</small></td>
+<td bgcolor=#FFBB55><img src="images/desert/sun_advllqdtdaefsajw.jpg" width=120 height=75><br><small>Campus</small></td>
+</tr>
+<tr>
+<td>Football Field</td>
+<td>0.94</td>
+<td bgcolor=LightBlue><img src="images/football_field/sun_ankybdlnwqemdeph.jpg" width=100 height=75></td>
+<td bgcolor=LightBlue><img src="images/football_field/sun_aedcjgjztgoialpm.jpg" width=113 height=75></td>
+<td bgcolor=LightGreen><img src="images/football_field/sun_ahqkbelqgjflpbjo.jpg" width=101 height=75></td>
+<td bgcolor=LightGreen><img src="images/football_field/sun_bdqotfaejeyquplq.jpg" width=100 height=75></td>
+<td bgcolor=LightCoral><img src="images/bamboo_forest/sun_aceztgmiqkbghnpu.jpg" width=51 height=75><br><small>Bamboo Forest</small></td>
+<td bgcolor=LightCoral><img src="images/campus/sun_alewbcnalibklcwh.jpg" width=75 height=75><br><small>Campus</small></td>
+<td bgcolor=#FFBB55><img src="images/football_field/sun_aedcjgjztgoialpm.jpg" width=100 height=75><br><small>Airport</small></td>
+<td bgcolor=#FFBB55><img src="images/football_field/sun_aszinldqqvnpmwfh.jpg" width=94 height=75><br><small>Auditorium</small></td>
+</tr>
+<tr>
+<td>Kitchen</td>
+<td>0.98</td>
+<td bgcolor=LightBlue><img src="images/kitchen/sun_aaatkmnywzopvrpq.jpg" width=113 height=75></td>
+<td bgcolor=LightBlue><img src="images/kitchen/sun_aadbddgrdsjugojn.jpg" width=113 height=75></td>
+<td bgcolor=LightGreen><img src="images/kitchen/sun_aaesgnhzvszupuvo.jpg" width=113 height=75></td>
+<td bgcolor=LightGreen><img src="images/kitchen/sun_aaedkdzalmgthmau.jpg" width=113 height=75></td>
+<td bgcolor=LightCoral><img src="images/auditorium/sun_abemvqjoawjktewx.jpg" width=75 height=75><br><small>Auditorium</small></td>
+<td bgcolor=LightCoral><img src="images/campus/sun_abslhphpiejdjmpz.jpg" width=75 height=75><br><small>Campus</small></td>
+<td bgcolor=#FFBB55><img src="images/kitchen/sun_aakdxfbroywdvzac.jpg" width=113 height=75><br><small>Airport</small></td>
+<td bgcolor=#FFBB55><img src="images/kitchen/sun_aaktvzxuzcrholrn.jpg" width=113 height=75><br><small>Campus</small></td>
+</tr>
+<tr>
+<td>Sky</td>
+<td>0.99</td>
+<td bgcolor=LightBlue><img src="images/sky/sun_aacegqrsghanpufn.jpg" width=75 height=75></td>
+<td bgcolor=LightBlue><img src="images/sky/sun_aavmchfjuxkpmnuv.jpg" width=75 height=75></td>
+<td bgcolor=LightGreen><img src="images/sky/sun_abzorgamcedshvju.jpg" width=75 height=75></td>
+<td bgcolor=LightGreen><img src="images/sky/sun_acpxpptvngiwlxvy.jpg" width=75 height=75></td>
+<td bgcolor=LightCoral><img src="images/airport/sun_apryudtkjxleibce.jpg" width=113 height=75><br><small>Airport</small></td>
+<td bgcolor=LightCoral><img src="images/football_field/sun_aedcjgjztgoialpm.jpg" width=75 height=75><br><small>Football Field</small></td>
+<td bgcolor=#FFBB55><img src="images/sky/sun_aceixysijstuihde.jpg" width=75 height=75><br><small>Desert</small></td>
+<td bgcolor=#FFBB55><img src="images/sky/sun_acpxpptvngiwlxvy.jpg" width=75 height=75><br><small>Airport</small></td>
+</tr>
+<tr>
+
+<tr>
+<th>Category name</th>
+<th>Accuracy</th>
+<th colspan=2>Sample training images</th>
+<th colspan=2>Sample true positives</th>
+<th colspan=2>False positives with true label</th>
+<th colspan=2>False negatives with wrong predicted label</th>
+</tr>
+</table>
+</center>
+
+<h2>Confusion Matrix Results using Spatial Pyramid: rbf kernel</h2>
+	<center><p><u><h3>Spatial Pyramid Level 0: Bag of Words</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+<img src="pyramind_level_0.jpg" />
+	</p></center>
+
+	
+	<center><p><u><h3>Spatial Pyramid Level 1</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+	<img src="pyramid_level_1.jpg" />
+	</p></center>
+
+	<center><p><u><h3>Spatial Pyramid Level 10</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+	<img src="level10.jpg" />
+	</p></center>
+
+<h2>Confusion Matrix Results using Spatial Pyramid: linear kernel</h2>
+	<center><p><u><h3>Spatial Pyramid Level 0</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+	<img src="linear_p0_level.jpg" />
+	</p></center>
+	
+	<center><p><u><h3>Spatial Pyramid Level 5</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+	<img src="linear_p5_level.jpg" />
+	</p></center>
+	
+<h2>Confusion Matrix Results using Spatial Pyramid: Gaussian kernel</h2>
+		<center><p><u><h3>Spatial Pyramid Level 0</h3></u>
+	<p><h3><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing</b></h3></p>
+	<img src="gaussian_p0_level.jpg" />
+	</p></center>
+
+	<u><h3>Final ROC and RPC Curves</h3></u>
+<center><h3>rbf kernel</h3></center>
+	
+	<img src="roc.jpg" />
+	<img src="rpc.jpg" />
+	
+<center><h3>Gaussian kernel</h3></center>
+<img src="roc_rpc/roc_gaussian.jpg" />
+<img src="roc_rpc/rpc_gaussian.jpg" />
+
+<center><h3>Linear kernel</h3></center>
+<img src="roc_rpc/roc_linear.jpg" />
+<img src="roc_rpc/rpc_linear.jpg" />
+
+
+<h3>Conclusions</h3>
+<div style="clear:both" >
+<p> For the Spatial Pyramid, the accuracy increased as the levels increased until to level 5, then the accuracy started going down. We think this is because a level 5 spatial pyramid splits the image into 256 sections, and as the image is divided into smaller pieces, the less likely it is that a test image will be a close enough match to be classified confidently. When we changed the kernels, the rbf showed much better results compared to gaussian and linear. For the random decision forest method, we weren't able to get it running with any reasonable accuracy. 
+</p>
+
+<h3>References</h3>
+
+<p>
+	<strong>http://slazebni.cs.illinois.edu/publications/pyramid_chapter.pdf</strong>
+</p>
+<p>
+<strong>http://www-cvr.ai.uiuc.edu/ponce_grp/publication/paper/cvpr06b.pdf</strong>
+	</p>
+	<p>
+<strong>http://www.ifp.illinois.edu/~jyang29/ScSPM.htm</strong>
+</p><p>
+<strong>http://web.engr.illinois.edu/~slazebni/research/</strong>
+</p>
+
+
+
+</div>
+</body>
+</html>
